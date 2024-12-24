@@ -1,0 +1,53 @@
+apiVersion: v1alpha1
+sts-region: ap-south-1  # Define sts-region at the top if it's globally applicable
+
+discovery:
+  jobs:
+    # AWS VPN Metrics
+    - type: AWS/VPN
+      regions:
+        - ap-south-1
+      period: 86400
+      length: 604800
+      dimensionNameRequirements: [VpnId]
+      metrics:
+        - name: TunnelDataIn
+          statistics: [Sum, Maximum, Minimum, Average]
+        - name: TunnelState
+          statistics: [Maximum, Minimum, Average]
+        - name: TunnelDataOut
+          statistics: [Sum, Maximum, Minimum, Average]
+
+    # AWS RDS Metrics
+    - type: AWS/RDS
+      regions:
+        - ap-south-1
+      period: 300
+      length: 86400
+      searchTags:
+        - key: Monitor-Name
+          value: UAT-RDS
+      dimensionNameRequirements: [DBInstanceIdentifier]  # Essential for proper filtering
+      metrics:
+        - name: CPUUtilization
+          statistics: [Average, Minimum, Maximum]
+        - name: DatabaseConnections
+          statistics: [Sum, Average, Minimum, Maximum]
+        - name: FreeableMemory
+          statistics: [Average, Minimum, Maximum]
+        - name: FreeStorageSpace
+          statistics: [Average, Minimum, Maximum]
+        - name: ReadThroughput
+          statistics: [Average, Maximum, Sum, Minimum]
+        - name: WriteThroughput
+          statistics: [Average, Maximum, Sum, Minimum]
+        - name: ReadIOPS
+          statistics: [Average, Maximum, Sum, Minimum]
+        - name: WriteIOPS
+          statistics: [Average, Maximum, Sum, Minimum]
+        - name: DBLoad
+          statistics: [Average, Maximum]
+        - name: DBLoadCPU
+          statistics: [Average, Maximum]
+        - name: CheckpointLag
+          statistics: [Average, Maximum, Minimum]

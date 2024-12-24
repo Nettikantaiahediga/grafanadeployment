@@ -1,0 +1,20 @@
+groups:
+  - name: VPNAlerts
+    rules:
+      - alert: VPNDownCritical
+        expr: aws_vpn_tunnel_state_average < 1
+        for: 15m
+        labels:
+          severity: critical
+        annotations:
+          summary: "VPN Tunnel is Down"
+          description: "The VPN Tunnel ID {{ $labels.dimension_VpnId }} and name {{ $labels.name }} is down for more than 5 minutes."
+
+      - alert: VPNDownWarning
+        expr: aws_vpn_tunnel_state_average < 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "VPN Tunnel is Down"
+          description: "The VPN Tunnel ID {{ $labels.dimension_VpnId }} and name {{ $labels.name }} is down for more than 5 minutes."
